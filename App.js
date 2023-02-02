@@ -31,13 +31,14 @@ import {newKit} from '@celo/contractkit';
 import {OdisUtils} from '@celo/identity';
 import {
   getServiceContext,
-  ODIS_ALFAJORES_CONTEXT,
+  OdisContextName,
+  ODIS_ALFAJORES_CONTEXT_PNP,
 } from '@celo/identity/lib/odis/query';
 import {buyMoreQuota, getQuota} from './src/utils/odisUtils';
 import {E164_REGEX} from './src/services/twilio';
 import {ReactBlsBlindingClient} from './src/utils/bls-blinding-client';
 import {IdentifierPrefix} from '@celo/identity/lib/odis/identifier';
-import {ISSUER_PRIVATE_KEY} from 'react-native-dotenv';
+import {ISSUER_PRIVATE_KEY} from '@env';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -77,7 +78,7 @@ const App = () => {
         authenticationMethod: OdisUtils.Query.AuthenticationMethod.WALLET_KEY,
         contractKit: issuerKit,
       };
-      const serviceContext = getServiceContext(ODIS_ALFAJORES_CONTEXT);
+      const serviceContext = getServiceContext(OdisContextName.ALFAJORES);
 
       const remainingQuota = await getQuota(
         issuerKit.defaultAccount,
@@ -94,18 +95,27 @@ const App = () => {
         serviceContext.odisPubKey,
       );
 
-      const response = await OdisUtils.Identifier.getObfuscatedIdentifier(
-        phoneNumber,
-        IdentifierPrefix.PHONE_NUMBER,
-        issuer.address,
-        authSigner,
-        serviceContext,
-        undefined,
-        undefined,
-        blindingClient,
-      );
+      const {obfuscatedIdentifier} =
+        await OdisUtils.Identifier.getObfuscatedIdentifier(
+          phoneNumber,
+          IdentifierPrefix.PHONE_NUMBER,
+          issuer.address,
+          authSigner,
+          serviceContext,
+          undefined,
+          undefined,
+          blindingClient,
+        );
 
-      console.log(response);
+      const attestationReceipt = await federatedAttestations
+        .registerAttestationAsIssuer(
+          obfuscatedIdentifier,
+          connector.accounts[0],
+          Math.floor(new Date().getTime() / 1000),
+        )
+        .sendAndWaitForReceipt();
+
+      console.log(attestationReceipt.transactionHash);
     } catch (e) {
       console.log(e);
     }
@@ -132,7 +142,7 @@ const App = () => {
 
         {connector.connected ? (
           <View>
-            <Text style={styles.text}>{connector.accounts}</Text>
+            <Text style={styles.text}>{connector.accounts[0]}</Text>
             <TextInput
               style={{
                 borderWidth: 1,
