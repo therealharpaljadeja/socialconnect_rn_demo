@@ -36,7 +36,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -51,5 +51,56 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>EBGaramond-Italic-VariableFont_wght.ttf</string>
+		<string>EBGaramond-VariableFont_wght.ttf</string>
+		<string>EBGaramond-Bold.ttf</string>
+		<string>EBGaramond-BoldItalic.ttf</string>
+		<string>EBGaramond-ExtraBold.ttf</string>
+		<string>EBGaramond-ExtraBoldItalic.ttf</string>
+		<string>EBGaramond-Italic.ttf</string>
+		<string>EBGaramond-Medium.ttf</string>
+		<string>EBGaramond-MediumItalic.ttf</string>
+		<string>EBGaramond-Regular.ttf</string>
+		<string>EBGaramond-SemiBold.ttf</string>
+		<string>EBGaramond-SemiBoldItalic.ttf</string>
+		<string>Jost-100-Hairline.otf</string>
+		<string>Jost-100-HairlineItalic.otf</string>
+		<string>Jost-200-Thin.otf</string>
+		<string>Jost-200-ThinItalic.otf</string>
+		<string>Jost-300-Light.otf</string>
+		<string>Jost-300-LightItalic.otf</string>
+		<string>Jost-400-Book.otf</string>
+		<string>Jost-400-BookItalic.otf</string>
+		<string>Jost-500-Medium.otf</string>
+		<string>Jost-500-MediumItalic.otf</string>
+		<string>Jost-600-Semi.otf</string>
+		<string>Jost-600-SemiItalic.otf</string>
+		<string>Jost-700-Bold.otf</string>
+		<string>Jost-700-BoldItalic.otf</string>
+		<string>Jost-800-Hevy.otf</string>
+		<string>Jost-800-HevyItalic.otf</string>
+		<string>Jost-900-Black.otf</string>
+		<string>Jost-900-BlackItalic.otf</string>
+		<string>Jost-100-Hairline.ttf</string>
+		<string>Jost-100-HairlineItalic.ttf</string>
+		<string>Jost-200-Thin.ttf</string>
+		<string>Jost-200-ThinItalic.ttf</string>
+		<string>Jost-300-Light.ttf</string>
+		<string>Jost-300-LightItalic.ttf</string>
+		<string>Jost-400-Book.ttf</string>
+		<string>Jost-400-BookItalic.ttf</string>
+		<string>Jost-500-Medium.ttf</string>
+		<string>Jost-500-MediumItalic.ttf</string>
+		<string>Jost-600-Semi.ttf</string>
+		<string>Jost-600-SemiItalic.ttf</string>
+		<string>Jost-700-Bold.ttf</string>
+		<string>Jost-700-BoldItalic.ttf</string>
+		<string>Jost-800-Heavy.ttf</string>
+		<string>Jost-800-HeavyItalic.ttf</string>
+		<string>Jost-900-Black.ttf</string>
+		<string>Jost-900-BlackItalic.ttf</string>
+	</array>
 </dict>
 </plist>
