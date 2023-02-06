@@ -23,7 +23,7 @@ const PhoneInputHOC = forwardRef((props, ref) => {
         borderRightColor: '#ddd',
       }}
       codeTextStyle={{
-        fontFamily: 'EB_Garamond',
+        fontFamily: 'EBGaramond-VariableFont_wght',
         // backgroundColor: "yellow",
         margin: 0,
       }}
@@ -34,7 +34,7 @@ const PhoneInputHOC = forwardRef((props, ref) => {
       }}
       textInputProps={{
         style: {
-          fontFamily: 'EB_Garamond',
+          fontFamily: 'EBGaramond-VariableFont_wght',
           fontSize: 16,
           // backgroundColor: "green",
           width: '100%',

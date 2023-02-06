@@ -62,8 +62,6 @@ import {H4, SmallText} from '../components/Typography';
 // }
 
 export default function Send() {
-  const connector = useWalletConnect();
-  const address = useAddress();
   const phoneInputRef = useRef(null);
   const [phoneNumber, setPhoneNumber] = useState('');
 
@@ -73,12 +71,14 @@ export default function Send() {
         <H4 style={{fontSize: 20}}>Send</H4>
         <TextInput
           style={{
-            fontFamily: 'EB_Garamond',
+            fontFamily: 'EBGaramond-VariableFont_wght',
             fontSize: 48,
             marginTop: 20,
+            color: 'black',
           }}
           keyboardType="number-pad"
           placeholder="0"
+          defaultValue="0"
           textAlign="center"
         />
         <SmallText
@@ -94,7 +94,7 @@ export default function Send() {
           ref={phoneInputRef}
           onChangeText={number => setPhoneNumber(number)}
         />
-        <Text style={{...styles.text, marginTop: 10}}>
+        <Text style={{...styles.text, color: 'black', marginTop: 10}}>
           Resolves to: [resolved_address]
         </Text>
         <View

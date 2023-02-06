@@ -28,7 +28,7 @@ export default function DrawerHeader({navigation, route, options}) {
       </TouchableOpacity>
       <Text
         style={{
-          fontFamily: 'EB_Garamond',
+          fontFamily: 'EBGaramond-VariableFont_wght',
           fontSize: 16,
         }}>
         {route.name}

@@ -64,7 +64,7 @@ export function H5({children, style}) {
   return (
     <Text
       style={[
-        {fontFamily: 'Jost-500-medium', color: 'black', fontSize: 16},
+        {fontFamily: 'Jost-500-Medium', color: 'black', fontSize: 16},
         style,
       ]}>
       {children}
@@ -76,7 +76,7 @@ export function H6({children, style}) {
   return (
     <Text
       style={[
-        {fontFamily: 'Jost-500-medium', color: 'black', fontSize: 16},
+        {fontFamily: 'Jost-500-Medium', color: 'black', fontSize: 16},
         style,
       ]}>
       {children}

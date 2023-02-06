@@ -10,7 +10,7 @@ export default function Input(props) {
           paddingVertical: 10,
           marginTop: 10,
           borderColor: '#ddd',
-          fontFamily: 'EB_Garamond',
+          fontFamily: 'EBGaramond-VariableFont_wght',
           paddingHorizontal: 20,
         },
         props.style,

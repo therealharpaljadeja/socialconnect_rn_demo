@@ -47,7 +47,7 @@ function OTP() {
         Registering address:{' '}
         <SmallText
           style={{
-            fontFamily: 'Jost_medium',
+            fontFamily: 'Jost-500-Medium',
             fontSize: 14,
             color: 'green',
           }}>{`${address.substring(0, 6)}...${address.substring(
@@ -87,7 +87,7 @@ function DeRegistration() {
         De-Registering address:{' '}
         <SmallText
           style={{
-            fontFamily: 'Jost_medium',
+            fontFamily: 'Jost-500-Medium',
             fontSize: 14,
             color: 'green',
           }}>{`${address.substring(0, 6)}...${address.substring(
