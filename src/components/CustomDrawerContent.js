@@ -15,7 +15,7 @@ function CustomDrawerHeader({focused, color}) {
         margin: 0,
         padding: 0,
       }}>
-      <Text style={{color: color}}>Celo Asv2</Text>
+      <Text style={{color: color}}>Celo SocialConnect</Text>
       <Text style={{color: color, marginTop: 5}}>
         Register and Send CELO using phone number
       </Text>
