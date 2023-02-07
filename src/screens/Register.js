@@ -76,6 +76,7 @@ function Registration() {
       <Button
         title="Register"
         onPress={handleRegister}
+        isLoading={isRegistering}
         // onPress={() => dispatch({type: 'flowChange', payload: 'OTP'})}
       />
       <SmallText style={{marginTop: 20}}>

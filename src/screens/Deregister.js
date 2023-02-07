@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import useAddress from '../hooks/useAddress';
 import Screen from '../components/Screen';
 import {H4, SmallText} from '../components/Typography';
-import React, {createContext, useContext, useReducer} from 'react';
+import React, {createContext, useContext, useReducer, useState} from 'react';
 import Input from '../components/Input';
 import KitContext from '../context/KitContext';
 
@@ -83,9 +83,17 @@ function DeRegistration() {
   const address = useAddress();
   const {state, dispatch} = useContext(DeRegistrationContext);
   const {deregisterIdentifier} = useContext(KitContext);
+  const [isDeregistering, setIsDeregistering] = useState(false);
 
   async function handleDeregister() {
-    await deregisterIdentifier(state.formattedPhoneNumber, address);
+    setIsDeregistering(true);
+    try {
+      await deregisterIdentifier(state.formattedPhoneNumber, address);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsDeregistering(false);
+    }
   }
 
   return (
@@ -111,7 +119,11 @@ function DeRegistration() {
           dispatch({type: 'formattedPhoneNumber', payload: text})
         }
       />
-      <Button title="De-Register" onPress={handleDeregister} />
+      <Button
+        title="De-Register"
+        onPress={handleDeregister}
+        isLoading={isDeregistering}
+      />
       <SmallText style={{marginTop: 20}}>
         This is the screen to deregister your phone number and un-link your EVM
         address from it

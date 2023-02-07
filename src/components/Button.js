@@ -1,12 +1,24 @@
-import {StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 
-export default function Button({onPress, style, title}) {
+export default function Button({onPress, style, title, isLoading = false}) {
   return (
     <TouchableOpacity
       activeOpacity={1}
       onPress={onPress}
       style={[styles.container, style]}>
-      <Text style={styles.title}>{title}</Text>
+      {isLoading ? (
+        <>
+          <ActivityIndicator color="white" style={{marginRight: 10}} />
+          <Text style={styles.title}>Loading...</Text>
+        </>
+      ) : (
+        <Text style={styles.title}>{title}</Text>
+      )}
     </TouchableOpacity>
   );
 }
@@ -15,7 +27,9 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 12,
     borderRadius: 5,
     backgroundColor: '#22c55e',
