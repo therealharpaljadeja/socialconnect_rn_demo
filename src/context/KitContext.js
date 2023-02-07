@@ -10,6 +10,7 @@ import {E164_REGEX} from '../services/twilio';
 import {ReactBlsBlindingClient} from '../utils/bls-blinding-client';
 import {buyMoreQuota, getQuota} from '../utils/odisUtils';
 import React, {useState, useEffect, useReducer} from 'react';
+import {useWalletConnect} from '@walletconnect/react-native-dapp';
 
 const KitContext = React.createContext(null);
 
@@ -38,6 +39,7 @@ const reducer = (state = INITIAL_STATE, action) => {
 export const KitProvider = ({children}) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const connector = useWalletConnect();
 
   useEffect(() => {
     const init = async () => {
@@ -98,6 +100,8 @@ export const KitProvider = ({children}) => {
         serviceContext,
       );
 
+      console.log(remainingQuota);
+
       if (remainingQuota < 1) {
         let paymentTxHash = await buyMoreQuota(state.issuer, state.issuerKit);
         console.log(`Odis Quota Payment: ${paymentTxHash}`);
@@ -152,7 +156,9 @@ export const KitProvider = ({children}) => {
           Math.floor(new Date().getTime() / 1000),
         )
         .sendAndWaitForReceipt();
-      console.log(attestationReceipt.transactionHash);
+      console.log(
+        `${await explorerLink()}tx/${attestationReceipt.transactionHash}`,
+      );
     }
   }
 
@@ -165,9 +171,35 @@ export const KitProvider = ({children}) => {
       const revokeReceipt = await state.federatedAttestations
         .revokeAttestation(identifier, state.issuer.address, address)
         .sendAndWaitForReceipt();
-      console.log(revokeReceipt.transactionHash);
+      console.log(`${await explorerLink()}tx/${revokeReceipt.transactionHash}`);
     }
   }
+
+  async function sendToPhoneNumber(from, phoneNumber, value) {
+    // Right now sending to the latest attested address
+
+    const accounts = await getAccountsFromPhoneNumber(phoneNumber);
+    if (accounts.length) {
+      const tx = await connector.sendTransaction({
+        from,
+        to: accounts.slice(-1)[0],
+        value,
+      });
+      console.log(tx);
+    }
+  }
+
+  const explorerLink = async () => {
+    const chainId = await state.issuerKit.connection.chainId();
+    switch (chainId) {
+      case 44787:
+        return 'https://alfajores.celoscan.io/';
+      case 42220:
+        return 'https://celoscan.io/';
+      default:
+        return '';
+    }
+  };
 
   return (
     <KitContext.Provider
@@ -177,6 +209,7 @@ export const KitProvider = ({children}) => {
         getAccountsFromPhoneNumber,
         registerIdentifier,
         deregisterIdentifier,
+        sendToPhoneNumber,
       }}>
       {children}
     </KitContext.Provider>

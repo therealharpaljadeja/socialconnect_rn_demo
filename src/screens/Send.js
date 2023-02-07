@@ -5,20 +5,18 @@ import {useContext, useRef, useState} from 'react';
 import PhoneInputHOC from '../components/PhoneInputHOC';
 import {H4, SmallText} from '../components/Typography';
 import KitContext from '../context/KitContext';
+import useAddress from '../hooks/useAddress';
 
 export default function Send() {
   const phoneInputRef = useRef(null);
+  const address = useAddress();
   const [phoneNumber, setPhoneNumber] = useState('');
-  const {getAccountsFromPhoneNumber} = useContext(KitContext);
+  const [sendValue, setSendValue] = useState(0);
+  const {sendToPhoneNumber} = useContext(KitContext);
   const [resolvedAddress, setResolvedAddress] = useState('[resolved_address]');
 
-  async function getAccounts() {
-    const accounts = await getAccountsFromPhoneNumber(phoneNumber);
-    if (accounts.length) {
-      setResolvedAddress(accounts[0]);
-    } else {
-      setResolvedAddress('No Accounts Found');
-    }
+  async function send() {
+    await sendToPhoneNumber(address, phoneNumber, sendValue);
   }
 
   return (
@@ -36,6 +34,8 @@ export default function Send() {
           placeholder="0"
           defaultValue="0"
           textAlign="center"
+          value={sendValue}
+          onChangeText={text => setSendValue(text)}
         />
         <SmallText
           style={{
@@ -59,7 +59,7 @@ export default function Send() {
             marginTop: 'auto',
             marginBottom: 30,
           }}>
-          <Button onPress={getAccounts} title="Send" />
+          <Button onPress={send} title="Send" />
         </View>
       </View>
     </Screen>
