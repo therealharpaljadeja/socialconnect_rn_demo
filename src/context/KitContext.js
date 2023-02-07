@@ -1,7 +1,10 @@
 import {newKit} from '@celo/contractkit';
 import {OdisUtils} from '@celo/identity';
 import {IdentifierPrefix} from '@celo/identity/lib/odis/identifier';
-import {OdisContextName} from '@celo/identity/lib/odis/query';
+import {
+  getServiceContext,
+  OdisContextName,
+} from '@celo/identity/lib/odis/query';
 import {ISSUER_PRIVATE_KEY} from '@env';
 import {E164_REGEX} from '../services/twilio';
 import {ReactBlsBlindingClient} from '../utils/bls-blinding-client';
@@ -70,9 +73,10 @@ export const KitProvider = ({children}) => {
 
   useEffect(() => {
     if (state.issuer) {
+      state.issuerKit.defaultAccount = state.issuer.address;
       dispatch({
         type: 'ISSUER_KIT',
-        payload: {...state.issuerKit, defaultAccount: state.issuer.address},
+        payload: state.issuerKit,
       });
     }
   }, [state.issuer]);
@@ -84,18 +88,18 @@ export const KitProvider = ({children}) => {
       }
       const authSigner = {
         authenticationMethod: OdisUtils.Query.AuthenticationMethod.WALLET_KEY,
-        contractKit: issuerKit,
+        contractKit: state.issuerKit,
       };
       const serviceContext = getServiceContext(OdisContextName.ALFAJORES);
 
       const remainingQuota = await getQuota(
-        issuerKit.defaultAccount,
+        state.issuerKit.defaultAccount,
         authSigner,
         serviceContext,
       );
 
       if (remainingQuota < 1) {
-        let paymentTxHash = await buyMoreQuota(issuer, issuerKit);
+        let paymentTxHash = await buyMoreQuota(state.issuer, state.issuerKit);
         console.log(`Odis Quota Payment: ${paymentTxHash}`);
       }
 
@@ -107,7 +111,7 @@ export const KitProvider = ({children}) => {
         await OdisUtils.Identifier.getObfuscatedIdentifier(
           phoneNumber,
           IdentifierPrefix.PHONE_NUMBER,
-          issuer.address,
+          state.issuer.address,
           authSigner,
           serviceContext,
           undefined,
@@ -121,8 +125,59 @@ export const KitProvider = ({children}) => {
     }
   }
 
+  async function getAccountsFromPhoneNumber(phoneNumber) {
+    const identifier = await getIdentifier(phoneNumber);
+    const attestations = await state.federatedAttestations.lookupAttestations(
+      identifier,
+      [state.issuer.address],
+    );
+    return attestations.accounts;
+  }
+
+  async function checkIfIdentifierIsRegisteredAlreadyUnderIssuer(phoneNumber) {
+    const accounts = await getAccountsFromPhoneNumber(phoneNumber);
+    return accounts.length;
+  }
+
+  async function registerIdentifier(phoneNumber, address) {
+    const isAlreadyRegistered =
+      await checkIfIdentifierIsRegisteredAlreadyUnderIssuer(phoneNumber);
+    if (!isAlreadyRegistered) {
+      const identifier = await getIdentifier(phoneNumber);
+
+      const attestationReceipt = await state.federatedAttestations
+        .registerAttestationAsIssuer(
+          identifier,
+          address,
+          Math.floor(new Date().getTime() / 1000),
+        )
+        .sendAndWaitForReceipt();
+      console.log(attestationReceipt.transactionHash);
+    }
+  }
+
+  async function deregisterIdentifier(phoneNumber, address) {
+    const isRegistered = await checkIfIdentifierIsRegisteredAlreadyUnderIssuer(
+      phoneNumber,
+    );
+    if (isRegistered) {
+      const identifier = await getIdentifier(phoneNumber);
+      const revokeReceipt = await state.federatedAttestations
+        .revokeAttestation(identifier, state.issuer.address, address)
+        .sendAndWaitForReceipt();
+      console.log(revokeReceipt.transactionHash);
+    }
+  }
+
   return (
-    <KitContext.Provider value={{isInitialized, state}}>
+    <KitContext.Provider
+      value={{
+        isInitialized,
+        state,
+        getAccountsFromPhoneNumber,
+        registerIdentifier,
+        deregisterIdentifier,
+      }}>
       {children}
     </KitContext.Provider>
   );
