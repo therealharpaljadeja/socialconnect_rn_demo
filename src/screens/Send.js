@@ -46,7 +46,10 @@ export default function Send() {
           CELO
         </SmallText>
         <SmallText style={{...styles.text}}>To</SmallText>
-        <PhoneInputHOC ref={phoneInputRef} onChangeText={setPhoneNumber} />
+        <PhoneInputHOC
+          ref={phoneInputRef}
+          onChangeFormattedText={text => setPhoneNumber(text)}
+        />
         <Text style={{...styles.text, color: 'black', marginTop: 10}}>
           Resolves to: {resolvedAddress}
         </Text>
