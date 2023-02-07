@@ -1,69 +1,25 @@
 import Button from '../components/Button';
 import {View, Text, StyleSheet, TextInput, Image} from 'react-native';
 import Screen from '../components/Screen';
-import {useRef, useState} from 'react';
+import {useContext, useRef, useState} from 'react';
 import PhoneInputHOC from '../components/PhoneInputHOC';
-import {useWalletConnect} from '@walletconnect/react-native-dapp';
-import useAddress from '../hooks/useAddress';
 import {H4, SmallText} from '../components/Typography';
-
-// function SendBottomSheetContent() {
-//     return (
-//         <View
-//             style={{
-//                 height: 500,
-//                 width: "100%",
-//                 alignItems: "center",
-//                 paddingTop: 20,
-//                 paddingHorizontal: 25,
-//             }}
-//         >
-//             <View style={{ flex: 1, width: "100%", alignItems: "center" }}>
-//                 <H4>Summary</H4>
-//                 <Image
-//                     source={require("../assets/send_to_phone.png")}
-//                     style={{
-//                         height: 200,
-//                         width: 200,
-//                     }}
-//                 />
-//             </View>
-//             <View style={{ width: "100%", marginBottom: 80 }}>
-//                 <View
-//                     style={{
-//                         width: "100%",
-//                         flexDirection: "row",
-//                         justifyContent: "space-between",
-//                     }}
-//                 >
-//                     <H5>To</H5>
-//                     <View style={{ alignItems: "flex-end" }}>
-//                         <SmallText>+1-1234567890</SmallText>
-//                         <SmallText style={{ fontSize: 14, color: "gray" }}>
-//                             0x5739039
-//                         </SmallText>
-//                     </View>
-//                 </View>
-//                 <View
-//                     style={{
-//                         width: "100%",
-//                         flexDirection: "row",
-//                         justifyContent: "space-between",
-//                         marginTop: 10,
-//                     }}
-//                 >
-//                     <H5>Amount</H5>
-//                     <SmallText>[amount] CELO</SmallText>
-//                 </View>
-//                 <Button title="Confirm" />
-//             </View>
-//         </View>
-//     );
-// }
+import KitContext from '../context/KitContext';
 
 export default function Send() {
   const phoneInputRef = useRef(null);
   const [phoneNumber, setPhoneNumber] = useState('');
+  const {getAccountsFromPhoneNumber} = useContext(KitContext);
+  const [resolvedAddress, setResolvedAddress] = useState('[resolved_address]');
+
+  async function getAccounts() {
+    const accounts = await getAccountsFromPhoneNumber(phoneNumber);
+    if (accounts.length) {
+      setResolvedAddress(accounts[0]);
+    } else {
+      setResolvedAddress('No Accounts Found');
+    }
+  }
 
   return (
     <Screen>
@@ -90,12 +46,9 @@ export default function Send() {
           CELO
         </SmallText>
         <SmallText style={{...styles.text}}>To</SmallText>
-        <PhoneInputHOC
-          ref={phoneInputRef}
-          onChangeText={number => setPhoneNumber(number)}
-        />
+        <PhoneInputHOC ref={phoneInputRef} onChangeText={setPhoneNumber} />
         <Text style={{...styles.text, color: 'black', marginTop: 10}}>
-          Resolves to: [resolved_address]
+          Resolves to: {resolvedAddress}
         </Text>
         <View
           style={{
@@ -103,7 +56,7 @@ export default function Send() {
             marginTop: 'auto',
             marginBottom: 30,
           }}>
-          <Button onPress={() => console.log('Send')} title="Send" />
+          <Button onPress={getAccounts} title="Send" />
         </View>
       </View>
     </Screen>

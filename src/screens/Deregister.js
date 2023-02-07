@@ -6,6 +6,7 @@ import Screen from '../components/Screen';
 import {H4, SmallText} from '../components/Typography';
 import React, {createContext, useContext, useReducer} from 'react';
 import Input from '../components/Input';
+import KitContext from '../context/KitContext';
 
 const INITIAL_STATE = {
   flow: 'DEREGISTRATION',
@@ -81,6 +82,12 @@ function OTP() {
 function DeRegistration() {
   const address = useAddress();
   const {state, dispatch} = useContext(DeRegistrationContext);
+  const {deregisterIdentifier} = useContext(KitContext);
+
+  async function handleDeregister() {
+    await deregisterIdentifier(state.formattedPhoneNumber, address);
+  }
+
   return (
     <View style={{flex: 1}}>
       <SmallText style={{marginTop: 5}}>
@@ -104,10 +111,7 @@ function DeRegistration() {
           dispatch({type: 'formattedPhoneNumber', payload: text})
         }
       />
-      <Button
-        title="De-Register"
-        onPress={() => dispatch({type: 'flowChange', payload: 'OTP'})}
-      />
+      <Button title="De-Register" onPress={handleDeregister} />
       <SmallText style={{marginTop: 20}}>
         This is the screen to deregister your phone number and un-link your EVM
         address from it

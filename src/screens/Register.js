@@ -8,6 +8,7 @@ import React, {useContext, useReducer} from 'react';
 import Input from '../components/Input';
 import {TouchableOpacity} from 'react-native';
 import {createContext} from 'react';
+import KitContext from '../context/KitContext';
 
 const INITIAL_STATE = {
   flow: 'REGISTRATION',
@@ -42,6 +43,12 @@ const RegistrationProvider = ({children}) => {
 function Registration() {
   const address = useAddress();
   const {state, dispatch} = useContext(RegistrationContext);
+  const {registerIdentifier} = useContext(KitContext);
+
+  async function handleRegister() {
+    // console.log(address);
+    await registerIdentifier(state.formattedPhoneNumber, address);
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -68,7 +75,8 @@ function Registration() {
       />
       <Button
         title="Register"
-        onPress={() => dispatch({type: 'flowChange', payload: 'OTP'})}
+        onPress={handleRegister}
+        // onPress={() => dispatch({type: 'flowChange', payload: 'OTP'})}
       />
       <SmallText style={{marginTop: 20}}>
         This is the screen to register your phone number and link your EVM
