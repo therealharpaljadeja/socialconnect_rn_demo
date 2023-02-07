@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@celo/contractkit": "~2.3.0",
@@ -20,6 +21,8 @@
     "Base64": "^1.1.0",
     "bignumber.js": "^9.1.1",
     "node-libs-react-native": "^1.2.0",
+    "patch-package": "^6.5.1",
+    "postinstall-postinstall": "^2.1.0",
     "react": "17.0.2",
     "react-native": "0.66.4",
     "react-native-blind-threshold-bls": "valora-inc/react-native-blind-threshold-bls#e7305cc",
