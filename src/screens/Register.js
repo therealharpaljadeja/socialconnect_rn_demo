@@ -4,7 +4,7 @@ import PhoneInputHOC from '../components/PhoneInputHOC';
 import Button from '../components/Button';
 import useAddress from '../hooks/useAddress';
 import {H4, SmallText} from '../components/Typography';
-import React, {useContext, useReducer} from 'react';
+import React, {useContext, useReducer, useState} from 'react';
 import Input from '../components/Input';
 import {TouchableOpacity} from 'react-native';
 import {createContext} from 'react';
@@ -44,10 +44,16 @@ function Registration() {
   const address = useAddress();
   const {state, dispatch} = useContext(RegistrationContext);
   const {registerIdentifier} = useContext(KitContext);
-
+  const [isRegistering, setIsRegistering] = useState(false);
   async function handleRegister() {
-    // console.log(address);
-    await registerIdentifier(state.formattedPhoneNumber, address);
+    setIsRegistering(true);
+    try {
+      await registerIdentifier(state.formattedPhoneNumber, address);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsRegistering(false);
+    }
   }
 
   return (
