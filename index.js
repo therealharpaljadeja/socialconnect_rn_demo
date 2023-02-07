@@ -12,7 +12,8 @@ import 'react-native-gesture-handler';
 
 const Root = withWalletConnect(AppWrapper, {
   clientMeta: {
-    description: 'Connect with WalletConnect',
+    name: 'SocialConnect',
+    description: 'Connect with SocialConnect',
   },
   redirectUrl:
     Platform.OS === 'web' ? window.location.origin : 'socialconnect://',
