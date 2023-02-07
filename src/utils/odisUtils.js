@@ -50,13 +50,12 @@ export async function checkIfEnoughAllowanceToBuyQuota(issuer, issuerKit) {
   let currentAllowance = await getOdisPaymentAllowance(issuer, issuerKit);
   const ONE_CENT_CUSD = issuerKit.web3.utils.toWei('0.01', 'ether');
 
-  return currentAllowance > BigNumber(ONE_CENT_CUSD);
+  return BigNumber(currentAllowance).gte(BigNumber(ONE_CENT_CUSD));
 }
 
 export async function payOdisPaymentAndGetQuota(issuer, issuerKit) {
   const odisPaymentContract = await issuerKit.contracts.getOdisPayments();
   const ONE_CENT_CUSD = issuerKit.web3.utils.toWei('0.001', 'ether');
-  console.log('payodis', issuer);
   const odisPayment = await odisPaymentContract
     .payInCUSD(issuer.address, ONE_CENT_CUSD)
     .sendAndWaitForReceipt();
@@ -72,19 +71,17 @@ export async function buyMoreQuota(issuer, issuerKit) {
   let paymentTxHash;
 
   if (isAllowanceEnough) {
-    paymentTxHash = await payOdisPaymentAndGetQuota(issuer, issuerKit);
-    return paymentTxHash;
-  } else {
-    await increaseOdisPaymentAllowance(issuerKit);
-    let isAllowanceEnough = await checkIfEnoughAllowanceToBuyQuota(
-      issuer,
-      issuerKit,
-    );
-    if (isAllowanceEnough) {
+    try {
       paymentTxHash = await payOdisPaymentAndGetQuota(issuer, issuerKit);
       return paymentTxHash;
-    } else {
-      throw 'cUSD approval failed';
+    } catch (e) {
+      console.log(e);
+    }
+  } else {
+    try {
+      await increaseOdisPaymentAllowance(issuerKit);
+    } catch (e) {
+      console.log(e);
     }
   }
 }
