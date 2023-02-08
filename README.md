@@ -26,6 +26,8 @@ To get a local copy up and running follow these simple steps.
 - React Native
 - Nodejs
 - Yarn
+- Android Studio (For Android)
+- XCode (For iOS)
 
 ### Installation
 
@@ -39,6 +41,12 @@ To get a local copy up and running follow these simple steps.
 
    ```sh
    yarn
+   ```
+
+3. Start App (Android)
+
+   ```sh
+   npx react-native run-android
    ```
 
 ### Contributing
