@@ -4,7 +4,9 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import {useWalletConnect} from '@walletconnect/react-native-dapp';
+import {useContext} from 'react';
 import {Text, View} from 'react-native';
+import KitContext from '../context/KitContext';
 import useAddress from '../hooks/useAddress';
 import Button from './Button';
 
@@ -25,6 +27,8 @@ function CustomDrawerHeader({focused, color}) {
 
 export default function CustomDrawerContent(props) {
   const connector = useWalletConnect();
+  const {state} = useContext(KitContext);
+  const {issuer} = state;
   const address = useAddress();
 
   function handleDisconnect() {
@@ -51,6 +55,15 @@ export default function CustomDrawerContent(props) {
           borderTopWidth: 1,
           borderTopColor: '#ccc',
         }}>
+        <View
+          style={{
+            borderRadius: 5,
+            paddingVertical: 10,
+            paddingHorizontal: 10,
+          }}>
+          <Text style={{color: '#333'}}>Issuer Address:</Text>
+          <Text style={{color: '#333', marginTop: 5}}>{issuer.address}</Text>
+        </View>
         <View
           style={{
             borderRadius: 5,
