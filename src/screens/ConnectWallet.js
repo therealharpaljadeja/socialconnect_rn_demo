@@ -18,7 +18,6 @@ export default function ConnectWallet() {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text>Connect Wallet</Text>
         <Button title="Connect Wallet" onPress={handlePress} />
       </View>
     </Screen>
