@@ -11,12 +11,35 @@ export default function Send() {
   const phoneInputRef = useRef(null);
   const address = useAddress();
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [sendValue, setSendValue] = useState(0);
-  const {sendToPhoneNumber} = useContext(KitContext);
+  const [sendValue, setSendValue] = useState('0');
+  const [resolvingAddress, setResolvingAddress] = useState(false);
+  const {sendToPhoneNumber, getAccountsFromPhoneNumber} =
+    useContext(KitContext);
   const [resolvedAddress, setResolvedAddress] = useState('[resolved_address]');
 
   async function send() {
-    await sendToPhoneNumber(address, phoneNumber, sendValue);
+    setResolvingAddress(true);
+    try {
+      await sendToPhoneNumber(address, resolvedAddress, sendValue);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setResolvingAddress(false);
+    }
+  }
+
+  async function getAccounts() {
+    setResolvingAddress(true);
+
+    try {
+      const accounts = await getAccountsFromPhoneNumber(phoneNumber);
+      if (accounts.length) setResolvedAddress(accounts.slice(-1)[0]);
+      else setResolvedAddress('No Accounts Found');
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setResolvingAddress(false);
+    }
   }
 
   return (
@@ -59,7 +82,16 @@ export default function Send() {
             marginTop: 'auto',
             marginBottom: 30,
           }}>
-          <Button onPress={send} title="Send" />
+          {resolvedAddress !== '[resolved_address]' &&
+          resolvedAddress !== 'No Accounts Found' ? (
+            <Button title="Confirm" onPress={send} />
+          ) : (
+            <Button
+              onPress={getAccounts}
+              isLoading={resolvingAddress}
+              title="Send"
+            />
+          )}
         </View>
       </View>
     </Screen>
