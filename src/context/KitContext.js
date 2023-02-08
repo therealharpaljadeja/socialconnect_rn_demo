@@ -175,18 +175,14 @@ export const KitProvider = ({children}) => {
     }
   }
 
-  async function sendToPhoneNumber(from, phoneNumber, value) {
+  async function sendToPhoneNumber(from, to, value) {
     // Right now sending to the latest attested address
-
-    const accounts = await getAccountsFromPhoneNumber(phoneNumber);
-    if (accounts.length) {
-      const tx = await connector.sendTransaction({
-        from,
-        to: accounts.slice(-1)[0],
-        value,
-      });
-      console.log(tx);
-    }
+    const tx = await connector.sendTransaction({
+      from,
+      to,
+      value,
+    });
+    console.log(tx);
   }
 
   const explorerLink = async () => {
