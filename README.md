@@ -8,11 +8,6 @@
 <video src="https://user-images.githubusercontent.com/38040789/217602778-4fa4741f-9fd3-441e-b9b0-98bf705fc715.mp4">
 </p>
 
-
-
-
-
-
 ### Built With
 
 - [React Native](https://reactnative.dev/)
