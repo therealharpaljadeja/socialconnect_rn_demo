@@ -43,11 +43,18 @@ To get a local copy up and running follow these simple steps.
    yarn
    ```
 
-3. Start App (Android)
+3. Start App
 
+   (Android)
    ```sh
    npx react-native run-android
    ```
+   
+   (iOS)
+   ```sh
+   npx react-native run-ios
+   ```
+
 
 ### Contributing
 
