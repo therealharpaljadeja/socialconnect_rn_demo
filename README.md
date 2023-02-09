@@ -42,8 +42,10 @@ To get a local copy up and running follow these simple steps.
    ```sh
    yarn
    ```
+   
+3. Add Issuer private key in .env
 
-3. Start App
+4. Start App
 
    (Android)
    ```sh
